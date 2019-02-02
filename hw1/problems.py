@@ -1,5 +1,12 @@
 from node import Node
 
+# helper functions
+def getXY(board, val):
+    for x in range(len(board)):
+        for y in range(len(board[0])):
+            if board[x][y] == val:
+                return [x, y]
+    return None
 
 class FifteensNode(Node):
     """Extends the Node class to solve the 15 puzzle.
@@ -51,6 +58,12 @@ class FifteensNode(Node):
                 self.board.append([int(n) for n in line.split()])
         else:
             self.board = board
+            self.goal_board = [
+                [1, 2, 3, 4],
+                [5, 6, 7, 8],
+                [9, 10, 11, 12],
+                [13, 14, 15, 0]
+            ]
 
         super(FifteensNode, self).__init__(parent, g)
 
@@ -66,7 +79,57 @@ class FifteensNode(Node):
         # TODO: add your code here
         # You should use self.board to produce children. Don't forget to create a new board for each child
         # e.g you can use copy.deepcopy function from the standard library.
-        pass
+        board = self.board
+        row_len = len(board)
+        col_len = len(board[0])
+        [x, y] = getXY(board, 0)  # get x and y values of empty cell
+
+        children = []
+
+        # creating boards and nodes
+
+        # add board by switching empty cell with...
+        # right cell
+        if x > 0:
+            # make copy of board
+            new_board = [row[:] for row in board]
+            temp = new_board[x][y]
+            new_board[x][y] = new_board[x - 1][y]
+            new_board[x - 1][y] = temp
+
+            new_node = FifteensNode(self, self.g + 1, new_board)
+            children.push(new_node)
+        # left cell
+        if x < row_len - 1:
+            # make copy of board
+            new_board = [row[:] for row in board]
+            temp = new_board[x][y]
+            new_board[x][y] = new_board[x + 1][y]
+            new_board[x + 1][y] = temp
+
+            new_node = FifteensNode(self, self.g + 1, new_board)
+            children.push(new_node)
+        # above cell
+        if y > 0:
+            # make copy of board
+            new_board = [row[:] for row in board]
+            temp = new_board[x][y]
+            new_board[x][y] = new_board[x][y - 1]
+            new_board[x][y - 1] = temp
+
+            new_node = FifteensNode(self, self.g + 1, new_board)
+            children.push(new_node)
+        # below cell
+        if y < col_len - 1:
+            # make copy of board
+            new_board = [row[:] for row in board]
+            temp = new_board[x][y]
+            new_board[x][y] = new_board[x][y + 1]
+            new_board[x][y + 1] = temp
+
+            new_node = FifteensNode(self, self.g + 1, new_board)
+            children.push(new_node)
+        return children
 
     def is_goal(self):
         """Decides whether this search state is the final state of the puzzle.
@@ -79,7 +142,15 @@ class FifteensNode(Node):
 
         # TODO: add your code here
         # You should use self.board to decide.
-        pass
+        board = self.board
+        checker = 0
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if board[i][j] == checker:
+                    checker += 1
+                else:
+                    return False
+        return True
 
     def evaluate_heuristic(self):
         """Heuristic function h(n) that estimates the minimum number of moves
@@ -91,9 +162,19 @@ class FifteensNode(Node):
                 The heuristic value for this state.
         """
 
-        # TODO: add your code here
-        # You may want to use self.board here.
-        pass
+        # h = hueristic
+        # the total number of moves each indiv. tile may need
+        # to get to its correct spot
+        h = 0
+        board = self.board
+        for i in len(board):
+            for j in len(board[0]):
+                # get coordinates of actual value
+                [x, y] = getXY(self.goal_board, board[i][j])
+                # add min # of moves to move a single tile to its
+                # correct spot to hueristic
+                h += abs(x - i) + abs(y - j)
+        return h
 
     def _get_state(self):
         """Returns an hashable representation of this search state.
@@ -127,7 +208,6 @@ class FifteensNode(Node):
                     sb.append(str(i))
             sb.append('\n')
         return ''.join(sb)
-
 
 class SuperqueensNode(Node):
     """Extends the Node class to solve the Superqueens problem.

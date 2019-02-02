@@ -8,6 +8,7 @@ solve different problems.
 
 """
 
+from queue import PriorityQueue
 
 def Astar(root):
     """Runs the A* algorithm given the root node. The class of the root node
@@ -39,4 +40,43 @@ def Astar(root):
     # You can access the state of a node by `node.state`. (You may also want to store evaluated states)
     # You should consider the states evaluated and the ones in the fringe to avoid repeated calculation in 5. above.
     # You can compare two node states by node1.state == node2.state
-    pass
+    if root is None:
+        return None
+
+    children = root.generate_children()
+
+    if root.is_goal():
+        return root.get_path
+    elif children == []:
+        return []
+    else:
+        pq = PriorityQueue()
+        return search(root, pq)
+
+
+# - Add children to PQ
+# - If child node exists already in PQ, then update f and update PQ
+# - Pop the child in PQ with lowest f value
+# - Recursive call
+def search(node, queue):
+    if node is None:
+        return None
+
+    children = node.generate_children()
+
+    if node.is_goal():
+        return node.get_path()
+    elif children == []:
+        return []
+
+    for child in children:
+        queue.put((child.f, child))
+
+    while queue:
+        element = queue.get()  # tuple of (weight, node)
+        node = element[1]
+        path = search(node, queue)
+        if path != [] or path is not None:
+            return path
+
+    return None

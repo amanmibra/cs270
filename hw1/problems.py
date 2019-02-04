@@ -314,9 +314,9 @@ class SuperqueensNode(Node):
         # You should use self.queen_positions and self.n to decide.
         # TODO: add your code here
         # print(self.queen_positions, self.f)
-        if len(self.queen_positions) == self.n:
-            print(self.queen_positions, self.f)
-            print(self)
+        # print(self.queen_positions)
+        # print(self._get_state())
+        # print(self)
         return len(self.queen_positions) == self.n
 
     def evaluate_heuristic(self):
@@ -348,7 +348,7 @@ class SuperqueensNode(Node):
         [x, y] = new_queen
         for queen in queens:
             [x1, y1] = queen
-            if abs(x - x1) + abs(y - y1) == 3:
+            if (abs(x - x1) + abs(y - y1)) == 3:
                 output += 1
             if abs(x - x1) == abs(y - y1):
                 output += 1

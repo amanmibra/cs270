@@ -46,19 +46,19 @@ def Astar(root):
     children = root.generate_children()
 
     if root.is_goal():
-        return root.get_path
+        return root.get_path()
     elif children == []:
         return []
     else:
         pq = PriorityQueue()
-        return search(root, pq)
+        return search(root, pq, [])
 
 
 # - Add children to PQ
 # - If child node exists already in PQ, then update f and update PQ
 # - Pop the child in PQ with lowest f value
 # - Recursive call
-def search(node, queue):
+def search(node, queue, visited):
     if node is None:
         return None
 
@@ -70,13 +70,16 @@ def search(node, queue):
         return []
 
     for child in children:
-        queue.put((child.f, child))
+        if not node.visited(child, visited):
+            queue.put((child.f, child))
 
-    while queue:
+    while not queue.empty():
         element = queue.get()  # tuple of (weight, node)
         node = element[1]
-        path = search(node, queue)
-        if path != [] or path is not None:
+        visited.append(node)
+        path = search(node, queue, visited)
+        print(path)
+        if path != [] and path is not None:
             return path
 
     return None

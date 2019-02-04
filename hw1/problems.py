@@ -1,5 +1,6 @@
 from node import Node
 
+
 # helper functions
 def getXY(board, val):
     for x in range(len(board)):
@@ -7,6 +8,7 @@ def getXY(board, val):
             if board[x][y] == val:
                 return [x, y]
     return None
+
 
 class FifteensNode(Node):
     """Extends the Node class to solve the 15 puzzle.
@@ -58,13 +60,13 @@ class FifteensNode(Node):
                 self.board.append([int(n) for n in line.split()])
         else:
             self.board = board
-            self.goal_board = [
-                [1, 2, 3, 4],
-                [5, 6, 7, 8],
-                [9, 10, 11, 12],
-                [13, 14, 15, 0]
-            ]
 
+        self.goal_board = [
+            [1, 2, 3, 4],
+            [5, 6, 7, 8],
+            [9, 10, 11, 12],
+            [13, 14, 15, 0]
+        ]
         super(FifteensNode, self).__init__(parent, g)
 
     def generate_children(self):
@@ -98,7 +100,7 @@ class FifteensNode(Node):
             new_board[x - 1][y] = temp
 
             new_node = FifteensNode(self, self.g + 1, new_board)
-            children.push(new_node)
+            children.append(new_node)
         # left cell
         if x < row_len - 1:
             # make copy of board
@@ -108,7 +110,7 @@ class FifteensNode(Node):
             new_board[x + 1][y] = temp
 
             new_node = FifteensNode(self, self.g + 1, new_board)
-            children.push(new_node)
+            children.append(new_node)
         # above cell
         if y > 0:
             # make copy of board
@@ -118,7 +120,7 @@ class FifteensNode(Node):
             new_board[x][y - 1] = temp
 
             new_node = FifteensNode(self, self.g + 1, new_board)
-            children.push(new_node)
+            children.append(new_node)
         # below cell
         if y < col_len - 1:
             # make copy of board
@@ -128,7 +130,7 @@ class FifteensNode(Node):
             new_board[x][y + 1] = temp
 
             new_node = FifteensNode(self, self.g + 1, new_board)
-            children.push(new_node)
+            children.append(new_node)
         return children
 
     def is_goal(self):
@@ -142,15 +144,7 @@ class FifteensNode(Node):
 
         # TODO: add your code here
         # You should use self.board to decide.
-        board = self.board
-        checker = 0
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                if board[i][j] == checker:
-                    checker += 1
-                else:
-                    return False
-        return True
+        return self.board == self.goal_board
 
     def evaluate_heuristic(self):
         """Heuristic function h(n) that estimates the minimum number of moves
@@ -167,8 +161,8 @@ class FifteensNode(Node):
         # to get to its correct spot
         h = 0
         board = self.board
-        for i in len(board):
-            for j in len(board[0]):
+        for i in range(len(board)):
+            for j in range(len(board[0])):
                 # get coordinates of actual value
                 [x, y] = getXY(self.goal_board, board[i][j])
                 # add min # of moves to move a single tile to its
@@ -208,6 +202,24 @@ class FifteensNode(Node):
                     sb.append(str(i))
             sb.append('\n')
         return ''.join(sb)
+
+    def visited(self, child, visited):
+        new_board = child.board
+        # path = self.get_path()
+        for node in visited:
+            if node.board == new_board:
+                # print(node.board)
+                # print(node.evaluate_heuristic())
+                # print(new_board)
+                return True
+        return False
+
+    # comparator functions
+    def __cmp__(self, other):
+        return cmp(self.f, other.f)
+
+    def __lt__(self, other):
+        return self.f < other.f
 
 class SuperqueensNode(Node):
     """Extends the Node class to solve the Superqueens problem.

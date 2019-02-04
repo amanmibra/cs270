@@ -78,7 +78,6 @@ def search(node, queue, visited):
         node = element[1]
         visited.append(node)
         path = search(node, queue, visited)
-        print(path)
         if path != [] and path is not None:
             return path
 

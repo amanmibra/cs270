@@ -44,6 +44,15 @@ class Bot:
         #
         # TODO: add your code here
 
+        for j in range(board.width):
+            isFull = True
+            for i in range(board.height):
+                if len(board.board[i]) < j:
+                    isFull = False
+            if isFull:
+                new_board = Board(board)
+                new_board.makeMove(j)
+                children.append((j, new_board))
         return children
 
 # In this class you are required to implement the  minimax algorithm

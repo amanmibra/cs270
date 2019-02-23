@@ -43,13 +43,8 @@ class Bot:
         #######################################################################
         #
         # TODO: add your code here
-
         for j in range(board.width):
-            isFull = True
-            for i in range(board.height):
-                if len(board.board[i]) < j:
-                    isFull = False
-            if isFull:
+            if len(board.board[j]) < board.height:
                 new_board = Board(board)
                 new_board.makeMove(j)
                 children.append((j, new_board))
@@ -97,8 +92,30 @@ class minMaxBot(Bot):
         #
         # TODO: add your code here
 
-        return (0,0)  # This is just an example. Replace this with your (bestScore, bestMove)
+        if board.isGoal() is not -1 or depth is 0:
+            return (board.heuristic(), -1)
 
+        if player: #if it is player 1 or maximizing player
+            bestScore = -math.inf
+            bestMove = 0
+            for child in self.generateChildren(board):
+                new_move, new_board = child
+                new_score, move = self.miniMax(new_board, depth - 1, not player)
+                if new_score > bestScore:
+                    bestScore = new_score
+                    bestMove = new_move
+            return (bestScore, bestMove)
+        else: # player 2 or minimizing player
+            bestScore = math.inf
+            bestMove = 0
+            for child in self.generateChildren(board):
+                new_move, new_board = child
+                new_score, move = self.miniMax(new_board, depth - 1, not player)
+                if new_score < bestScore:
+                    bestScore = new_score
+                    bestMove = new_move
+            print(bestScore, bestMove)
+            return (bestScore, bestMove)
 
 # In this class you are required to implement the alpha beta pruning algorithm
 class alphaBetaBot(Bot):

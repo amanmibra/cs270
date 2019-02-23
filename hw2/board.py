@@ -117,7 +117,7 @@ class Board(object):
                 try:
                     # player 1
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == 0:
-                        h += 100
+                        h += 10
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] == 0:
                         h += 100
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] \
@@ -126,7 +126,7 @@ class Board(object):
 
                     # player 2
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == 1:
-                        h -= 100
+                        h -= 10
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] == 1:
                         h -= 100
                     if not j + 3 > self.height and state[i][j] == state[i + 1][j + 1] == state[i + 2][j + 2] \
@@ -157,3 +157,16 @@ class Board(object):
                 except IndexError:
                     pass
         return h
+
+    def print(self):
+        print("")
+        print("+" + "---+" * self.width)
+        for rowNum in range(self.height - 1, -1, -1):
+            row = "|"
+            for colNum in range(self.width):
+                if len(self.board[colNum]) > rowNum:
+                    row += " " + ('1' if self.board[colNum][rowNum] else '0') + " |"
+                else:
+                    row += "   |"
+            print(row)
+            print("+" + "---+" * self.width)

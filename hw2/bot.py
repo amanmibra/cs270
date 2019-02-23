@@ -114,7 +114,6 @@ class minMaxBot(Bot):
                 if new_score < bestScore:
                     bestScore = new_score
                     bestMove = new_move
-            print(bestScore, bestMove)
             return (bestScore, bestMove)
 
 # In this class you are required to implement the alpha beta pruning algorithm

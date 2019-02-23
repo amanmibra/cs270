@@ -163,7 +163,36 @@ class alphaBetaBot(Bot):
         #
         # TODO: add your code here
 
-        return (0,0)  # This is just an example. Replace this with your (bestScore, bestMove)
+        if board.isGoal() is not -1 or depth is 0:
+            return (board.heuristic(), -1)
+
+        if player: #if it is player 1 or maximizing player
+            bestScore = -math.inf
+            bestMove = 0
+            for child in self.generateChildren(board):
+                new_move, new_board = child
+                new_score, move = self.alphaBeta(new_board, depth - 1, not player, alpha, beta)
+                alpha = max(alpha, new_score)
+                if new_score > bestScore:
+                    bestScore = new_score
+                    bestMove = new_move
+                if alpha >= beta:
+                    break
+            return (bestScore, bestMove)
+        else: # player 2 or minimizing player
+            bestScore = math.inf
+            bestMove = 0
+            for child in self.generateChildren(board):
+                new_move, new_board = child
+                new_score, move = self.alphaBeta(new_board, depth - 1, not player, alpha, beta)
+                beta = min(beta, new_score)
+                if new_score < bestScore:
+                    bestScore = new_score
+                    bestMove = new_move
+                if alpha >= beta:
+                    break
+            return (bestScore, bestMove)
+
 
 
 

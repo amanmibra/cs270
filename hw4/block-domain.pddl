@@ -54,15 +54,12 @@
    (:action take-from-bag
      :parameters (?block)
      :precondition (and
-       (left-clear ?block)
-       (right-clear ?block)
-       (nothing-to-right ?block)
        (empty-hand)
        (in-bag ?block))
        :effect (and
-         (nothing-to-left ?block)
          (holding ?block)
          (not (empty-hand))
+         (not (in-bag ?block))
         )
      )
 
@@ -95,13 +92,18 @@
        (left-clear ?block)
        (right-clear ?block)
        (nothing-to-right ?block)
-       (empty-hand))
+       (empty-hand)
+       (on-table ?block)
+       (on-table ?left-block)
+       )
      :effect (and
        (nothing-to-right ?left-block)
        (nothing-to-left ?block)
        (holding ?block)
        (not (empty-hand))
-       (not (touching ?left-block ?block)))
+       (not (touching ?left-block ?block))
+       (not (on-table ?block))
+       )
    )
 
    (:action pick-up-from-top-right
@@ -110,11 +112,14 @@
        (left-clear ?block)
        (right-clear ?block)
        (nothing-to-right ?block)
-       (empty-hand))
-     :effect (and
        (nothing-to-left ?block)
+       (empty-hand)
+       (on-table ?block)
+       )
+     :effect (and
        (holding ?block)
        (not (empty-hand))
+       (not (on-table ?block))
        )
    )
 
@@ -141,29 +146,34 @@
    (:action put-down-from-top-right-touching
      :parameters (?block ?left-block)
      :precondition (and
+       (holding ?block)
+       (nothing-to-right ?left-block)
+       (on-table ?left-block)
+       )
+     :effect (and (empty-hand)
        (touching ?left-block ?block)
+       (not (holding ?block))
+       (not (nothing-to-right ?left-block))
        (left-clear ?block)
        (right-clear ?block)
        (nothing-to-right ?block)
-       (empty-hand))
-     :effect (and
-       (nothing-to-right ?left-block)
-       (nothing-to-left ?block)
-       (holding ?block)
-       (not (empty-hand))
-       (not (touching ?left-block ?block)))
+       (not (nothing-to-left ?block))
+       (on-table ?block)
+       )
      )
+
    (:action put-down-from-top-right
      :parameters (?block)
      :precondition (and
+       (holding ?block)
+       )
+     :effect (and (empty-hand)
+       (not (holding ?block))
        (left-clear ?block)
        (right-clear ?block)
        (nothing-to-right ?block)
-       (empty-hand))
-     :effect (and
        (nothing-to-left ?block)
-       (holding ?block)
-       (not (empty-hand))
+       (on-table ?block)
        )
      )
 )

@@ -55,6 +55,20 @@
 ;   (:action pick-up-from-top-right-stacked :parameters (?block ?left-below-block ?right-below-block) ... )
 ;   (:action pick-up-from-top-right-touching :parameters (?block ?left-block) ... )
 ;   (:action pick-up-from-top-right :parameters (?block) ... )
+   (:action take-from-bag
+     :parameters (?block)
+     :precondition (and
+       (left-clear ?block)
+       (right-clear ?block)
+       (nothing-to-right ?block)
+       (empty-hand)
+       (in-bag ?block))
+       :effect (and
+         (nothing-to-left ?block)
+         (holding ?block)
+         (not (empty-hand))
+        )
+     )
 ;   (:action put-down-from-top-right-stacked :parameters (?block ?left-below-block ?right-below-block) ... )
 ;   (:action put-down-from-top-right-touching :parameters (?block ?left-block) ... )
 ;   (:action put-down-from-top-right :parameters (?block) ... )

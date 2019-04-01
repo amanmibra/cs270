@@ -115,9 +115,55 @@
        (nothing-to-left ?block)
        (holding ?block)
        (not (empty-hand))
+       )
    )
 
-;   (:action put-down-from-top-right-stacked :parameters (?block ?left-below-block ?right-below-block) ... )
-;   (:action put-down-from-top-right-touching :parameters (?block ?left-block) ... )
-;   (:action put-down-from-top-right :parameters (?block) ... )
+   (:action put-down-from-top-right-stacked
+     :parameters (?block ?left-below-block ?right-below-block)
+     :precondition (and
+       (holding ?block)
+       (right-clear ?left-below-block)
+       (left-clear ?right-below-block)
+       (right-clear ?right-below-block)
+       (touching ?left-below-block ?right-below-block))
+     :effect (and (empty-hand)
+       (on-left ?block ?right-below-block)
+       (on-right ?block ?left-below-block)
+       (not (holding ?block))
+       (not (right-clear ?left-below-block))
+       (not (left-clear ?right-below-block))
+       (left-clear ?block)
+       (right-clear ?block)
+       (nothing-to-right ?block)
+       (not (nothing-to-left ?block)))
+     )
+
+   (:action put-down-from-top-right-touching
+     :parameters (?block ?left-block)
+     :precondition (and
+       (touching ?left-block ?block)
+       (left-clear ?block)
+       (right-clear ?block)
+       (nothing-to-right ?block)
+       (empty-hand))
+     :effect (and
+       (nothing-to-right ?left-block)
+       (nothing-to-left ?block)
+       (holding ?block)
+       (not (empty-hand))
+       (not (touching ?left-block ?block)))
+     )
+   (:action put-down-from-top-right
+     :parameters (?block)
+     :precondition (and
+       (left-clear ?block)
+       (right-clear ?block)
+       (nothing-to-right ?block)
+       (empty-hand))
+     :effect (and
+       (nothing-to-left ?block)
+       (holding ?block)
+       (not (empty-hand))
+       )
+     )
 )

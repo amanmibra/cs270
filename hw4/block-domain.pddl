@@ -72,12 +72,12 @@
          (left-clear ?block)
          (right-clear ?block)
          (nothing-to-right ?block)
+         (nothing-to-left ?block)
          (empty-hand)
        )
      :effect (and
          (right-clear ?left-below-block)
          (left-clear ?right-below-block)
-         (nothing-to-left ?block)
          (holding ?block)
          (not (empty-hand))
          (not (on-right ?block ?left-below-block))
@@ -94,7 +94,6 @@
        (nothing-to-right ?block)
        (empty-hand)
        (on-table ?block)
-       (on-table ?left-block)
        )
      :effect (and
        (nothing-to-right ?left-block)
@@ -128,6 +127,7 @@
      :precondition (and
        (holding ?block)
        (right-clear ?left-below-block)
+       (left-clear ?left-below-block)
        (left-clear ?right-below-block)
        (right-clear ?right-below-block)
        (touching ?left-below-block ?right-below-block))
@@ -139,6 +139,7 @@
        (not (left-clear ?right-below-block))
        (left-clear ?block)
        (right-clear ?block)
+       (nothing-to-left ?block)
        (nothing-to-right ?block)
        (not (nothing-to-left ?block)))
      )

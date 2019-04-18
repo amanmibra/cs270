@@ -114,9 +114,10 @@ class HMM(HMM_Meta):
 
         """
 
-        # updated_probs = np.empty(self.n_states)
+        updated_probs = np.copy(probs)
 
-        updated_probs = np.matmul(probs, o)
+        for i in range(self.n_beacons):
+            updated_probs *= self.obs_probs[i, o[i], :]
 
         # TODO: add your code here
         # Multiply (element-wise) probs with the observation probabilities P(O^{b}_{t}=o[b]|S_{t}) for each beacon b

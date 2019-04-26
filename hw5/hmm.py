@@ -148,16 +148,10 @@ class HMM(HMM_Meta):
 
         monitoring_probs[0] = self.init_probs
 
-        sum = 0 # sum for normalization
-
-        for t in range(T):
-            monitoring_probs[t] = monitoring_probs[t-1]
-            monitoring_probs[t] = self.predict(monitoring_probs[t])
-            monitoring_probs[t] = self.update(monitoring_probs[t], observations)
-            sum += monitoring_probs[t]
-
-        for t in range(T):
-            monitoring_probs[t] = monitoring_probs[t]/sum
+        for t in range(1, T):
+            monitoring_probs[t] = self.predict(monitoring_probs[t-1])
+            monitoring_probs[t] = self.update(monitoring_probs[t], observations[t])
+            monitoring_probs[t] /= np.sum(monitoring_probs[t])
 
         # TODO: add your code here
         # Store the initial probabilities in monitoring_probs[0]
